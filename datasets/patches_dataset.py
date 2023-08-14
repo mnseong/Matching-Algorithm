@@ -13,7 +13,7 @@ import torch.utils.data as data
 # from .utils import pipeline
 from utils.tools import dict_update
 
-from models.homographies import sample_homography
+# from models.homographies import sample_homography
 # from settings import DATA_PATH
 
 from imageio import imread
@@ -45,7 +45,7 @@ class PatchesDataset(data.Dataset):
             sequence_set.append(sample)
         self.samples = sequence_set
         self.transform = transform
-        if config['preprocessing']['resize']:
+        if self.config['preprocessing']['resize']:
             self.sizer = np.array(config['preprocessing']['resize'])
         pass
 
@@ -106,19 +106,21 @@ class PatchesDataset(data.Dataset):
         return len(self.samples)
 
     def _init_dataset(self, **config):
-        dataset_folder = './hpatches-sequences-release'
+        dataset_folder = '/Users/kweonminseong/Documents/git/Matching-Algorithm/datasets/hpatches-sequences-release'
         base_path = Path(dataset_folder)
         folder_paths = [x for x in base_path.iterdir() if x.is_dir()]
         image_paths = []
         warped_image_paths = []
         homographies = []
         for path in folder_paths:
-            if config['alteration'] == 'i' and path.stem[0] != 'i':
+            if self.config['alteration'] == 'i' and path.stem[0] != 'i':
                 continue
-            if config['alteration'] == 'v' and path.stem[0] != 'v':
+            if self.config['alteration'] == 'v' and path.stem[0] != 'v':
                 continue
-            num_images = 1 if config['dataset'] == 'coco' else 5
-            file_ext = '.ppm' if config['dataset'] == 'hpatches' else '.jpg'
+            # num_images = 1 if config['dataset'] == 'coco' else 5
+            # file_ext = '.ppm' if config['dataset'] == 'hpatches' else '.jpg'
+            num_images = 5
+            file_ext = '.ppm'
             for i in range(2, 2 + num_images):
                 image_paths.append(str(Path(path, "1" + file_ext)))
                 warped_image_paths.append(str(Path(path, str(i) + file_ext)))
