@@ -1,0 +1,47 @@
+data:
+    name: 'patches_dataset'
+    dataset: 'hpatches'  # 'hpatches' 'coco'
+    alteration: 'all'  # 'i' 'v' 'all'
+    cache_in_memory: false
+    validation_size: 100
+    preprocessing:
+        resize: [240, 320]  # False for coco
+#        resize: [480, 640]  # False for coco
+
+front_end_model: 'Train_model_frontend'
+model:
+    params: {
+    }
+    name: 'SuperPointNet'
+    method: 'sift'  # 'orb' 'sift'
+    batch_size: 8 # 32
+    eval_batch_size: 8 # 32
+    learning_rate: 0.0001 # 0.0001
+    detection_threshold: 0.015
+    nms: 4
+    top_k: 1000
+
+    lambda_loss: 1
+    dense_loss:
+        enable: false
+        params:
+            descriptor_dist: 4 # 4, 7.5
+            lambda_d: 800 # 800
+    sparse_loss:
+        enable: true
+        params:
+            num_matching_attempts: 1000
+            num_masked_non_matches_per_match: 100
+            lamda_d: 1
+            dist: 'cos'
+            method: '2d'
+
+eval_iter: 600
+seed: 1
+retrain: True # set true for new model
+reset_iter: True # set true to set the iteration number to 0
+train_iter: 200000 # 170000
+validation_interval: 200 # 2000
+tensorboard_interval: 200 # 200
+save_interval: 200 # 2000
+validation_size: 5
